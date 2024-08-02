@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { uploadImage } from '../lib/firebaseStorage'; // Import the upload function
-import { submitProduct } from '../lib/graphqlClient'; // Import the function
+import { submitProduct } from '../lib/graphqlClient'; // Import the submit function
 
 const AddProductForm = () => {
   const [productName, setProductName] = useState('');
@@ -61,7 +60,7 @@ const AddProductForm = () => {
       alert('Failed to add product. Please try again.');
     }
   };
-  
+
   return (
     <div className="p-4 max-w-lg mx-auto bg-white shadow-lg rounded-lg">
       <h1 className="text-xl font-bold mb-4">Add New Product</h1>
