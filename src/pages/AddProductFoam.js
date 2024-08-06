@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image'; // Import the Image component from Next.js
 import { uploadImage } from '../lib/firebaseStorage'; // Import the upload function
 import { submitProduct } from '../lib/graphqlClient'; // Import the submit function
 
@@ -14,6 +15,7 @@ const AddProductForm = () => {
   const [usage, setUsage] = useState('');
   const [images, setImages] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
+  const [isFeatured, setIsFeatured] = useState(false);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -46,6 +48,7 @@ const AddProductForm = () => {
         partitions,
         category,
         usage,
+        featured: isFeatured, // Ensure this value is included
         images: uploadedImageUrls,
       };
       const result = await submitProduct(formData);
@@ -177,6 +180,33 @@ const AddProductForm = () => {
           />
         </div>
 
+        {/* Is Featured */}
+        <div className="flex flex-col">
+          <label htmlFor="isFeatured" className="text-sm font-medium mb-1">Is Featured:</label>
+          <div className="flex items-center space-x-2">
+            <input
+              type="radio"
+              id="isFeaturedYes"
+              name="isFeatured"
+              value={true}
+              checked={isFeatured === true}
+              onChange={() => setIsFeatured(true)}
+              className="w-4 h-4 border-gray-300 rounded-sm focus:ring-2 focus:ring-blue-500"
+            />
+            <label htmlFor="isFeaturedYes" className="text-sm font-medium">Yes</label>
+            <input
+              type="radio"
+              id="isFeaturedNo"
+              name="isFeatured"
+              value={false}
+              checked={isFeatured === false}
+              onChange={() => setIsFeatured(false)}
+              className="w-4 h-4 border-gray-300 rounded-sm focus:ring-2 focus:ring-blue-500"
+            />
+            <label htmlFor="isFeaturedNo" className="text-sm font-medium">No</label>
+          </div>
+        </div>
+
         {/* Image Upload */}
         <div className="flex flex-col">
           <label htmlFor="images" className="text-sm font-medium mb-1">Upload Images:</label>
@@ -193,11 +223,13 @@ const AddProductForm = () => {
         {imageUrls.length > 0 && (
           <div className="flex flex-wrap gap-4 mt-4">
             {imageUrls.map((url, index) => (
-              <img
+              <Image
                 key={index}
                 src={url}
                 alt={`Preview ${index}`}
-                className="w-24 h-24 object-cover border border-gray-300 rounded-lg"
+                width={96}
+                height={96}
+                className="object-cover border border-gray-300 rounded-lg"
               />
             ))}
           </div>

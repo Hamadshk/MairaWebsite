@@ -1,52 +1,43 @@
-import React from 'react';
-import Image from 'next/image';
 import UCPlogo from "../assets/images/UCP.png";
 import UOLlogo from '../assets/images/UOL.png';
+import React, { useEffect, useState } from 'react';
+import client, { GET_REVIEWS_QUERY } from '@/lib/graphqlClient';
+import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import Button from 'react-bootstrap/Button';
+import { useRouter } from 'next/router';
 
 const Review = () => {
-  // Static content to ensure consistency
-  const reviews = [
-    {
-      id: 1,
-      quote: "“You made it so simple. My new site is so much faster and easier to work with than my old site. I just choose the page, make the change.”",
-      name: "University of Central Punjab",
-      role: "Freelance React Developer",
-      avatar: UCPlogo, // Use local import for UCP
-      stars: 5, // Adjust based on the review
-    },
-    {
-      id: 2,
-      quote: "“You made it so simple. My new site is so much faster and easier to work with than my old site. I just choose the page, make the change.”",
-      name: "University of Lahore",
-      role: "Freelance React Developer",
-      avatar: UOLlogo, // Use local import for UOL
-      stars: 5, // Adjust based on the review
-    },
-    {
-      id: 3,
-      quote: "“You made it so simple. My new site is so much faster and easier to work with than my old site. I just choose the page, make the change.”",
-      name: "University of Lahore",
-      role: "Freelance React Developer",
-      avatar: UOLlogo, // Use local import for UOL
-      stars: 5, // Adjust based on the review
-    },
-  ];
+  const [reviews, setReviews] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchReviews() {
+      try {
+        setLoading(true); // Start loading state
+        const { data } = await client.query({ query: GET_REVIEWS_QUERY });
+        setReviews(data.reviews);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      } finally {
+        setLoading(false); // End loading state
+      }
+    }
+
+    fetchReviews();
+  }, []);
 
   return (
     <div>
-      <section  id="reviews" className="py-12 bg-gray-50 sm:py-16 lg:py-20 px-20">
+      <section id="reviews" className="py-4 bg-gray-50 sm:py-16 lg:py-20 px-6 md:px-20">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="flex flex-col items-center">
             <div className="text-center">
-               
-              
-              <h2 className="mt-4 text-3xl font-bold text-gray-900 sm:text-4xl xl:text-5xl font-pj bg-clip-text text-transparent bg-gradient-to-r from-red-500 via-brown-500 to-red-900">
+              <h2 className="mt-4 py-4 text-3xl font-bold text-gray-900 sm:text-4xl xl:text-5xl font-pj bg-clip-text text-transparent bg-gradient-to-r from-red-500 via-brown-500 to-red-900">
                 Our happy clients say about us
               </h2>
             </div>
-
-            
-
             <div className="relative mt-10 md:mt-24 md:order-2">
               <div className="absolute -inset-x-1 inset-y-16 md:-inset-x-2 md:-inset-y-6">
                 <div
@@ -57,28 +48,30 @@ const Review = () => {
                   }}
                 ></div>
               </div>
-
               <div className="relative grid max-w-lg grid-cols-1 gap-6 mx-auto md:max-w-none lg:gap-10 md:grid-cols-3">
                 {reviews.map((review) => (
-                  <div key={review.id} className="flex flex-col overflow-hidden shadow-xl bg-white rounded-lg">
+                  <div 
+                    key={review.id} 
+                    className="flex flex-col overflow-hidden shadow-xl bg-white rounded-lg transition-transform transform hover:scale-105"
+                  >
                     <div className="flex flex-col items-center p-6">
                       <Image
                         className="object-cover rounded-full w-24 h-24 mb-4"
-                        src={review.avatar} // Use next/image for both local and external images
-                        alt={`${review.name}'s avatar`}
+                        src={review.imageUrl} // Use next/image for both local and external images
+                        alt={`${review.instituteName}'s avatar`}
                         width={96} // Width of the image
                         height={96} // Height of the image
                       />
                       <div className="text-center mb-4">
                         <p className="text-base font-bold text-gray-900 font-pj">
-                          {review.name}
+                          {review.instituteName}
                         </p>
                         <p className="text-sm font-pj text-gray-600">
-                          {review.role}
+                          {review.description}
                         </p>
                       </div>
                       <div className="flex items-center mb-4">
-                        {[...Array(review.stars)].map((_, index) => (
+                        {[...Array(Number.isInteger(review.rating) ? review.rating : 0)].map((_, index) => (
                           <svg
                             key={index}
                             className="w-5 h-5 text-[#FDB241]"

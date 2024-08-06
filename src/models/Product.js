@@ -11,6 +11,7 @@ const ProductSchema = new mongoose.Schema({
   partitions: { type: String },
   category: { type: String, required: true },
   usage: { type: String },
+  featured: { type: Boolean}, // Featured flag
   images: [{ type: String }], // Array of image URLs
 });
 

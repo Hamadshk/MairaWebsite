@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
-const AdminProductListing = ({ products }) => {
+const AdminProductListing = ({ products, handleProductDelete }) => {
   return (
     <div className="space-y-6">
       {products.map((product) => (
@@ -12,7 +12,7 @@ const AdminProductListing = ({ products }) => {
               <div className="mx-auto px-5 py-5">
                 <Image
                   src={product.images[0]}  // Display the first image for now
-                  alt="Product Image"
+                  alt={`Image of ${product.productName}`}
                   className="object-cover opacity-70 rounded-lg"
                   width={120}
                   height={120}
@@ -73,7 +73,10 @@ const AdminProductListing = ({ products }) => {
                 <button className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm md:text-base hover:bg-blue-600 flex items-center">
                   <FaEdit className="mr-1" /> Edit
                 </button>
-                <button className="bg-red-500 text-white px-3 py-1 rounded-md text-sm md:text-base hover:bg-red-600 flex items-center">
+                <button
+                  className="bg-red-500 text-white px-3 py-1 rounded-md text-sm md:text-base hover:bg-red-600 flex items-center"
+                  onClick={() => handleProductDelete(product.id)}
+                >
                   <FaTrashAlt className="mr-1" /> Delete
                 </button>
               </div>

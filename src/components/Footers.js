@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Footer } from "flowbite-react";
 import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from "react-icons/bs";
+import MairaLogo from '../assets/images/maira-rm-bg.png'
 
 const Footers = () => {
   const [isClient, setIsClient] = useState(false);
@@ -15,14 +16,14 @@ const Footers = () => {
 
   return (
     <div>
-      <div className="border-t border-gray-200 py-6 mt-8"></div>
+      <div className="border-gray-200"></div>
       <Footer container>
-        <div className="w-full">
+        <div className="w-full rounded-none"> {/* Added rounded-none class */}
           <div className="py-12 grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
             <div>
               <Footer.Brand
                 href="https://flowbite.com"
-                src="https://flowbite.com/docs/images/logo.svg"
+                src={MairaLogo}
                 alt="Flowbite Logo"
                 name="Flowbite"
               />
@@ -50,8 +51,6 @@ const Footers = () => {
                 </Footer.LinkGroup>
               </div>
             </div>
-
-            
           </div>
           <Footer.Divider />
           <div className="w-full sm:flex sm:items-center sm:justify-between">

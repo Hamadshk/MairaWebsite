@@ -7,6 +7,7 @@ import { BookCover } from 'book-cover-3d';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import Review from '@/components/Review';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import { ApolloProvider } from '@apollo/client';
 
 const LandingPage = () => {
   const [text, setText] = useState('');
@@ -66,20 +67,20 @@ const LandingPage = () => {
             className="object-cover opacity-50"
           />
         </div>
-        <div className="relative flex flex-col lg:flex-row items-center justify-between w-full h-full px-8 py-10">
+        <div className="relative flex flex-col lg:flex-row items-center justify-between w-full h-full px-8 py-20">
           <div className="ml-5 flex-1 flex flex-col items-start lg:items-start justify-center lg:pr-10">
             <div className="text-3xl sm:text-4xl font-bold text-white mb-4" style={{ minHeight: '4rem' }}>
               <span>{text}</span>
             </div>
             <div className="relative flex justify-center w-full lg:w-auto ">
-                <Button variant="contained" color="success">
-                  SHOP NOW
-                </Button>
+              <Button variant="contained" color="success">
+                SHOP NOW
+              </Button>
             </div>
           </div>
           <div className="relative w-full max-w-md lg:w-1/2 flex items-center justify-center mt-10 lg:mt-0">
-            <div className="w-full h-64 sm:w-48 sm:h-64">
-              {/* <BookCover height={225} width={150}>
+            {/* <div className="w-full h-64 sm:w-48 sm:h-64">
+              <BookCover height={225} width={150}>
                 <Image
                   src={MairaLogo}
                   alt="Book Cover"
@@ -87,8 +88,8 @@ const LandingPage = () => {
                   style={{ objectFit: 'cover' }}
                   className="rounded-lg"
                 />
-              </BookCover> */}
-            </div>
+              </BookCover>
+            </div> */}
           </div>
         </div>
       </div>
@@ -97,20 +98,20 @@ const LandingPage = () => {
           Our Featured Products
         </h2>
         <div className="w-24 h-1 bg-gradient-to-r from-red-500 via-brown-500 to-black mx-auto mt-2"></div>
-      </div>
-      <div className="mt-8">
-        <FeaturedProducts />
-      </div>
-      <div className="text-center mt-8">
-        <a
-          href="#reviews"
-          className="pb-2 text-base font-bold leading-7 text-gray-900 transition-all duration-200 border-b-2 border-gray-900 hover:border-gray-600 focus:outline-none focus:ring-1 focus:ring-gray-900 focus:ring-offset-2 hover:text-gray-600"
-        >
-        </a>
-      </div>
-      <Review />
-      <div>
-        <WhatsAppButton />
+        <div >
+          <FeaturedProducts />
+        </div>
+        <div className="text-center ">
+          <a
+            href="#reviews"
+            className="pb-2 text-base font-bold leading-7 text-gray-900 transition-all duration-200 border-b-2 border-gray-900 hover:border-gray-600 focus:outline-none focus:ring-1 focus:ring-gray-900 focus:ring-offset-2 hover:text-gray-600"
+          >
+          </a>
+        </div>
+        <Review />
+        <div>
+          <WhatsAppButton />
+        </div>
       </div>
     </div>
   );

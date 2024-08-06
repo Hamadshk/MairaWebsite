@@ -6,7 +6,9 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-// Define the GraphQL query
+// Define the GraphQL queries and mutations
+
+// Query to fetch products
 export const GET_PRODUCTS_QUERY = gql`
   query GetProducts {
     products {
@@ -21,11 +23,29 @@ export const GET_PRODUCTS_QUERY = gql`
       category
       usage
       images
+      featured
     }
   }
 `;
-
-// Define the GraphQL mutation
+export const GET_FEATURED_PRODUCTS_QUERY = gql`
+  query GetFeaturedProducts {
+    featuredProducts {
+      id
+      productName
+      price
+      size
+      dimensions
+      pageQuality
+      numberOfPages
+      partitions
+      category
+      usage
+      images
+      featured
+    }
+  }
+`;
+// Mutation to add a product
 const ADD_PRODUCT_MUTATION = gql`
   mutation AddProduct(
     $productName: String!,
@@ -37,7 +57,8 @@ const ADD_PRODUCT_MUTATION = gql`
     $partitions: String,
     $category: String!,
     $usage: String,
-    $images: [String]
+    $images: [String],
+    $featured: Boolean
   ) {
     addProduct(
       productName: $productName,
@@ -49,7 +70,8 @@ const ADD_PRODUCT_MUTATION = gql`
       partitions: $partitions,
       category: $category,
       usage: $usage,
-      images: $images
+      images: $images,
+      featured: $featured
     ) {
       id
       productName
@@ -62,6 +84,59 @@ const ADD_PRODUCT_MUTATION = gql`
       category
       usage
       images
+      featured
+    }
+  }
+`;
+
+export const DELETE_PRODUCT_MUTATION = gql`
+  mutation DeleteProduct($id: ID!) {
+    deleteProduct(id: $id) {
+      id
+    }
+  }
+`;
+
+export const ADD_REVIEW_MUTATION = gql`
+  mutation AddReview(
+    $instituteName: String!,
+    $description: String!,
+    $rating: Float!,
+    $imageUrl: String
+  ) {
+    addReview(
+      instituteName: $instituteName,
+      description: $description,
+      rating: $rating,
+      imageUrl: $imageUrl
+    ) {
+      id
+      instituteName
+      description
+      rating
+      imageUrl
+    }
+  }
+`;
+
+// Query to fetch reviews
+export const GET_REVIEWS_QUERY = gql`
+  query GetReviews {
+    reviews {
+      id
+      instituteName
+      description
+      rating
+      imageUrl
+    }
+  }
+`;
+
+// Mutation to delete a review
+export const DELETE_REVIEW_MUTATION = gql`
+  mutation DeleteReview($id: ID!) {
+    deleteReview(id: $id) {
+      id
     }
   }
 `;
@@ -76,6 +151,48 @@ export const submitProduct = async (productData) => {
     return data.addProduct;
   } catch (error) {
     console.error('Error in submitProduct:', error);
+    throw error;
+  }
+};
+
+// Function to submit review data
+export const submitReview = async (reviewData) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: ADD_REVIEW_MUTATION,
+      variables: reviewData,
+    });
+    return data.addReview;
+  } catch (error) {
+    console.error('Error in submitReview:', error);
+    throw error;
+  }
+};
+
+// Function to delete a review
+export const deleteReview = async (id) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: DELETE_REVIEW_MUTATION,
+      variables: { id },
+    });
+    return data.deleteReview;
+  } catch (error) {
+    console.error('Error in deleteReview:', error);
+    throw error;
+  }
+};
+
+// Function to delete a product
+export const deleteProduct = async (id) => {
+  try {
+    const { data } = await client.mutate({
+      mutation: DELETE_PRODUCT_MUTATION,
+      variables: { id },
+    });
+    return data.deleteProduct;
+  } catch (error) {
+    console.error('Error in deleteProduct:', error);
     throw error;
   }
 };
